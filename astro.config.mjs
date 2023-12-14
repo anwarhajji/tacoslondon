@@ -1,6 +1,5 @@
 import { defineConfig } from "astro/config";
 import { astroImageTools } from "astro-imagetools";
-
 import mdx from "@astrojs/mdx";
 import m2dx from "astro-m2dx";
 import sitemap from "@astrojs/sitemap";
@@ -14,67 +13,48 @@ import vue from "@astrojs/vue";
 /** @type {import('astro-m2dx').Options} */
 import prefetch from "@astrojs/prefetch";
 import compress from "astro-compress";
+import netlify from "@astrojs/netlify/functions";
 const m2dxOptions = {
   exportComponents: true,
   unwrapImages: true,
-  autoImports: true,
+  autoImports: true
 };
+
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://frenchtacoslondon.com",
-  integrations: [
-    mdx({}),
-    sitemap(),
-    tailwind(),
-    vue({
-      appEntrypoint: "/src/pages/_app",
-    }),
-    astroImageTools,
-    prefetch(),
-    compress({
-      CSS: true,
-      HTML: false,
-      Image: false,
-      JavaScript: true,
-      SVG: true,
-    }),
-  ],
+  integrations: [mdx({}), sitemap(), tailwind(), vue({
+    appEntrypoint: "/src/pages/_app"
+  }), astroImageTools, prefetch(), compress({
+    CSS: true,
+    HTML: false,
+    Image: false,
+    JavaScript: true,
+    SVG: true
+  })],
   markdown: {
     extendDefaultPlugins: true,
-    remarkPlugins: [
-      [
-        remarkEmbedder,
-        {
-          transformers: [oembedTransformer],
-        },
-      ],
-      [m2dx, m2dxOptions],
-    ],
-    rehypePlugins: [
-      [
-        rehypeExternalLinks,
-        {
-          rel: ["nofollow"],
-          target: ["_blank"],
-        },
-      ],
-    ],
+    remarkPlugins: [[remarkEmbedder, {
+      transformers: [oembedTransformer]
+    }], [m2dx, m2dxOptions]],
+    rehypePlugins: [[rehypeExternalLinks, {
+      rel: ["nofollow"],
+      target: ["_blank"]
+    }]]
   },
   vite: {
     build: {
       rollupOptions: {
-        external: [
-          "/_pagefind/pagefind.js",
-          "/_pagefind/pagefind-ui.js",
-          "/_pagefind/pagefind-ui.css",
-        ],
+        external: ["/_pagefind/pagefind.js", "/_pagefind/pagefind-ui.js", "/_pagefind/pagefind-ui.css"]
       },
-      assetsInlineLimit: 10096,
-    },
+      assetsInlineLimit: 10096
+    }
   },
   build: {
-    inlineStylesheets: "always",
+    inlineStylesheets: "always"
   },
   scopedStyleStrategy: "attribute",
+  output: "server",
+  adapter: netlify()
 });
