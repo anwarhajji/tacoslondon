@@ -1,0 +1,87 @@
+---
+import { getEntry } from "astro:content"; 
+import { marked } from "marked";
+import { Icon } from "astro-icon";
+import { t } from "@util/translate";
+
+
+const today = new Date();
+let about = await getEntry("config", "about");
+let contact = await getEntry("config", "contact");
+let navigation = await getEntry("config", "navigation");
+
+ 
+
+
+---
+
+<footer class="surface-footer relative grid">
+  <div
+    class="container-xl mx-auto flex flex-col justify-between pb-5 pt-10 lg:flex-row lg:space-y-0"
+  >
+    <div
+      class="flex flex-col  place-content-center items-center pb-8 text-center lg:w-/3 lg:items-start lg:text-left"
+    >
+      <a rel="noopener noreferrer" href="#" aria-label={t("back_to_home")}>
+        <h1 style="font-family: LOVELO;" class="   md:text-left lg:text-4xl u-text ">
+        <span >FRENCH</span>  <span >TACOS</span>
+      </h1>
+      </a>
+
+      {
+        about.data.footer_text && (
+          <div
+            class="balance pr-4 pt-4 text-sm opacity-70"
+            set:html={marked.parse(about.data.footer_text)}
+          />
+        )
+      }
+      
+      {
+        about.data.footer_text && (
+          <div
+            class="balance pr-4 pt-4 text-sm opacity-70"
+            set:html={marked.parse(about.data.newsletter_text)}
+          />
+        )
+      }
+      <div class="mt-auto flex gap-2 pt-4 text-xs opacity-70">
+        <span>&copy;{today.getFullYear()}</span>
+        <span> FRENCHTACOS-LONDON</span>
+      </div>
+    </div>
+    
+    </div>
+  </div>
+
+  
+  
+  <slot />
+
+  <!-- ✌️✌️ Thanks!✌️✌️ -->
+</footer>
+<style></style>
+<style>
+  @keyframes flicker {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+  
+  .u-text {
+     font-size: 2rem; /* Adjust the font size as needed */
+    font-weight: bold; /* Adjust the font weight as needed */
+    background-image: linear-gradient(to right, #3498db, #00f7ff); /* Adjust the gradient colors */
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: flicker 1s infinite; /* Adjust the duration as needed */
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.7); /* Add a subtle text*/
+  }
+  
+  
+  
+   </style>
